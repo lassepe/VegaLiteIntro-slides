@@ -97,7 +97,7 @@ md"""
 """
 
 # ╔═╡ eccd1545-1eef-4e57-96c6-fde5090184ab
-md"# A Simple Plot"
+md"# A Simple Visualization Specification"
 
 # ╔═╡ 23aa0896-a83c-4acb-b006-655c1d2e4f63
 md"**Create a visualization specification**"
@@ -116,49 +116,22 @@ end;
 # ╔═╡ b66c9dd5-e46e-4d17-8d93-1fa0af1cc871
 md"**Pass data to the spec-object for visualization**"
 
-# ╔═╡ 1562b780-2618-4eff-a582-cf6c1ffbae9b
-md"""
-# Tranformations and Layers
-"""
-
-# ╔═╡ fdb12d82-247b-44f9-8c9d-121543680086
-md"# Saving and Loading Specifications"
-
-# ╔═╡ 81dd099d-72e2-4748-bd2f-f860167acac4
-PlutoUI.RemoteResource("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")
-
-# ╔═╡ 29222cbd-71fe-4a26-a9cd-617fc749f058
-md"""
-# Final Remarks
-
-##### Further Resources
-
-- [example gallerie](https://vega.github.io/vega-lite/examples/)
-- [online editor](https://vega.github.io/editor/#/examples/)
-- [data voyager](https://vega.github.io/voyager2/)
-"""
-
-# ╔═╡ 06e52c18-95c7-46a7-b9cb-2e8a47cd19d3
-@htl(
-"""
-<table style="margin: 0;">
-	<tr>
-	<th>Window Size</th>
-	<td>$(@bind window_size PlutoUI.Slider(2:2:40; show_value=true, default = 20))</td>
-	</tr>
-	<tr>
-	<th>Noise σ</th>
-	<td>$(@bind σ PlutoUI.Slider(0.0:0.01:1.0; default=0.5, show_value = true))</td>
-	</tr>
-</table>
- </br> 
-""")
+# ╔═╡ 1a9ce711-a086-444f-b88b-86fcc3509e7f
+md"Noise σ: $(@bind σ PlutoUI.Slider(0.0:0.01:1.0; default=0.5, show_value = true))"
 
 # ╔═╡ 61b8b0a0-f1e2-4ccb-828f-c54fe2a721aa
 data = ((time, amplitude = sin(time) + σ * randn()) for time in 0:0.01:2π) |> DataFrame
 
 # ╔═╡ 77048a1e-3761-4d34-95cb-a21f253b22a5
 canvas + scatter_plot_spec(data)
+
+# ╔═╡ 1562b780-2618-4eff-a582-cf6c1ffbae9b
+md"""
+# Tranformations and Layers
+"""
+
+# ╔═╡ 313934df-66a9-42e9-a6d4-73f13a6c90f6
+md"Rolling window size: $(@bind window_size PlutoUI.Slider(2:2:40; show_value=true, default = 20))"
 
 # ╔═╡ 0a7dae00-2154-42c9-9c39-ea16aa875013
 statistics_plot_spec = let
@@ -178,6 +151,23 @@ end;
 
 # ╔═╡ a6cbd17a-3656-4ce8-8728-e68b97c91695
 data |> (canvas + scatter_plot_spec + statistics_plot_spec)
+
+# ╔═╡ fdb12d82-247b-44f9-8c9d-121543680086
+md"# Saving and Loading Specifications"
+
+# ╔═╡ 81dd099d-72e2-4748-bd2f-f860167acac4
+PlutoUI.RemoteResource("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")
+
+# ╔═╡ 29222cbd-71fe-4a26-a9cd-617fc749f058
+md"""
+# Final Remarks
+
+##### Further Resources
+
+- [example gallerie](https://vega.github.io/vega-lite/examples/)
+- [online editor](https://vega.github.io/editor/#/examples/)
+- [data voyager](https://vega.github.io/voyager2/)
+"""
 
 # ╔═╡ 16c4c54e-89de-4609-a707-907971c9c29a
 md"# The End"
@@ -201,11 +191,12 @@ md"# The End"
 # ╠═c276c185-2442-43e2-a9c8-eba347f26715
 # ╟─b66c9dd5-e46e-4d17-8d93-1fa0af1cc871
 # ╠═77048a1e-3761-4d34-95cb-a21f253b22a5
+# ╟─1a9ce711-a086-444f-b88b-86fcc3509e7f
 # ╟─1562b780-2618-4eff-a582-cf6c1ffbae9b
 # ╠═0a7dae00-2154-42c9-9c39-ea16aa875013
 # ╠═a6cbd17a-3656-4ce8-8728-e68b97c91695
+# ╟─313934df-66a9-42e9-a6d4-73f13a6c90f6
 # ╟─fdb12d82-247b-44f9-8c9d-121543680086
 # ╠═81dd099d-72e2-4748-bd2f-f860167acac4
 # ╟─29222cbd-71fe-4a26-a9cd-617fc749f058
-# ╟─06e52c18-95c7-46a7-b9cb-2e8a47cd19d3
 # ╟─16c4c54e-89de-4609-a707-907971c9c29a
