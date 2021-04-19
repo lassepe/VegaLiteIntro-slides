@@ -23,6 +23,7 @@ preamble = begin
 	import PlutoUI
 	import JSON
 	import HypertextLiteral: @htl
+	import CSV
 end;
 
 # ╔═╡ 3ab521b5-ca30-4bd6-8a2a-93c55e91eac9
@@ -37,6 +38,7 @@ canvas = @vlplot(width = slide_width);
 main {
 	max-width: $(slide_width)px;
 }
+</style>
 """)
 
 # ╔═╡ 94918d60-37e7-48c8-8d08-28ad3e113960
@@ -61,17 +63,23 @@ md"""
 md"""
 # What is Vega Lite?
 
-- Vega Lite is a JSON *specification* for mapping data to visualization
-- Based on Leland Wilkinsons's *grammar of graphics* (c.f. `ggplot2`)
-- Various frond-ends can generate `.vl.json` spec files:
-  - JavaScript: `vega-lite.js`
-  - Julia: `VegaLite.jl`
-  - Python: `Altair`
+- Vega-Lite is a JSON *specification* (VLSpec) for mapping data to visualizations
+- Various methods for generating VLSpecs
+  - Manually: VegaEditor
+  - GUIs: DataVoyager, VegaDesktop
+  - Programatically:
+    - JavaScript: `vega-lite.js`
+    - Julia: `VegaLite.jl`
+    - Python: `Altair`
+- The Vega-Lite compiler renders spec files to various output formats
+  - `PNG`, `SVG`, `HTML`, ...
 """
 
 # ╔═╡ f1e8583e-e995-4e55-aeb2-db0a31cfa9a9
 md"""
 # Grammar of Graphics -- TL;DR
+
+Vega-Lite provides a very principled way of describing visualizations by following Leland Wilkinson's *Grammar of Graphics*:
 
 - **Data** is given in a tabular format.
 
@@ -92,7 +100,7 @@ md"""
 # ╔═╡ 51a6c6eb-bb4b-4301-ba37-df802f7878d0
 md"""
 **Tidy Data**: Table-like data that can be iterated column-wise
-- Language internal: `DataFrame`, iterable of `NamedTuple` or `Dict`.
+- Programmatically: `DataFrame`, iterable of `NamedTuple` or `Dict`.
 - Standalone: YAML, CSV, JSON
 """
 
@@ -112,9 +120,6 @@ scatter_plot_spec = let
 		},
 	)
 end;
-
-# ╔═╡ b66c9dd5-e46e-4d17-8d93-1fa0af1cc871
-md"**Pass data to the spec-object for visualization**"
 
 # ╔═╡ 1a9ce711-a086-444f-b88b-86fcc3509e7f
 md"Noise σ: $(@bind σ PlutoUI.Slider(0.0:0.01:1.0; default=0.5, show_value = true))"
@@ -152,11 +157,42 @@ end;
 # ╔═╡ a6cbd17a-3656-4ce8-8728-e68b97c91695
 data |> (canvas + scatter_plot_spec + statistics_plot_spec)
 
-# ╔═╡ fdb12d82-247b-44f9-8c9d-121543680086
-md"# Saving and Loading Specifications"
+# ╔═╡ 9df0b338-8b0c-433d-bc18-1c251c22a5e3
+md"# TODO: Saving VLSpecs"
 
-# ╔═╡ 81dd099d-72e2-4748-bd2f-f860167acac4
-PlutoUI.RemoteResource("https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png")
+# ╔═╡ b3d5f835-bd55-47b2-b3f5-b3ee2022b904
+VegaLite.save("scatter_plot.vegalite", scatter_plot_spec);
+
+# ╔═╡ 317d9a3e-03fe-4fac-95d3-6231516c0221
+CSV.write("data.csv", data);
+
+# ╔═╡ 9df59c02-8aba-4d15-8064-33763cfdb524
+md"**VLSpec in JSON Format**"
+
+# ╔═╡ 23cdd13b-4834-4fbe-9a18-b7ccec9717be
+Text(json_string(scatter_plot_spec))
+
+# ╔═╡ 669e6c2d-ad38-4ae1-955b-85454e158877
+md"# Loading a VLSpec"
+
+# ╔═╡ 9df46c9d-3169-4db2-9775-914b1772d3fe
+loaded_spec = VegaLite.load("scatter_plot.vegalite");
+
+# ╔═╡ 1a89e935-4d64-4291-bb78-4bb125963ce7
+loaded_data = CSV.read("data.csv", DataFrame)
+
+# ╔═╡ 34514626-c7c1-4929-84bb-e92b8c352ecb
+canvas + loaded_spec(loaded_data)
+
+# ╔═╡ fdb12d82-247b-44f9-8c9d-121543680086
+md"# A Potential Research Workflow"
+
+# ╔═╡ 458377ed-36db-4244-883c-19b07917a477
+md"""
+- **Code repos**: Create figures programatically with front-end of choice
+- **Paper repo**: Include visualization pipeline as `.csv` + `.vl.json`
+- **Other works**: Can load `.csv` and modify `.vegalite` to streamline figures per manuscript
+"""
 
 # ╔═╡ 29222cbd-71fe-4a26-a9cd-617fc749f058
 md"""
@@ -177,7 +213,7 @@ md"# The End"
 # ╠═ad3e186e-f5c8-49a3-a1d8-32f7c6d34e3c
 # ╠═3ab521b5-ca30-4bd6-8a2a-93c55e91eac9
 # ╠═02c5877a-2ace-45d9-b114-7c6603d887cc
-# ╟─6471a65a-0ec1-441f-82eb-b0303cc0a799
+# ╠═6471a65a-0ec1-441f-82eb-b0303cc0a799
 # ╟─94918d60-37e7-48c8-8d08-28ad3e113960
 # ╟─4f89263e-ead3-4eaf-9e1f-8c3b52dbae09
 # ╟─5abb7c5a-6270-4190-8172-3dbe69980e50
@@ -189,14 +225,22 @@ md"# The End"
 # ╟─eccd1545-1eef-4e57-96c6-fde5090184ab
 # ╟─23aa0896-a83c-4acb-b006-655c1d2e4f63
 # ╠═c276c185-2442-43e2-a9c8-eba347f26715
-# ╟─b66c9dd5-e46e-4d17-8d93-1fa0af1cc871
 # ╠═77048a1e-3761-4d34-95cb-a21f253b22a5
 # ╟─1a9ce711-a086-444f-b88b-86fcc3509e7f
 # ╟─1562b780-2618-4eff-a582-cf6c1ffbae9b
 # ╠═0a7dae00-2154-42c9-9c39-ea16aa875013
 # ╠═a6cbd17a-3656-4ce8-8728-e68b97c91695
 # ╟─313934df-66a9-42e9-a6d4-73f13a6c90f6
+# ╟─9df0b338-8b0c-433d-bc18-1c251c22a5e3
+# ╠═b3d5f835-bd55-47b2-b3f5-b3ee2022b904
+# ╠═317d9a3e-03fe-4fac-95d3-6231516c0221
+# ╟─9df59c02-8aba-4d15-8064-33763cfdb524
+# ╟─23cdd13b-4834-4fbe-9a18-b7ccec9717be
+# ╟─669e6c2d-ad38-4ae1-955b-85454e158877
+# ╠═9df46c9d-3169-4db2-9775-914b1772d3fe
+# ╠═1a89e935-4d64-4291-bb78-4bb125963ce7
+# ╠═34514626-c7c1-4929-84bb-e92b8c352ecb
 # ╟─fdb12d82-247b-44f9-8c9d-121543680086
-# ╠═81dd099d-72e2-4748-bd2f-f860167acac4
+# ╟─458377ed-36db-4244-883c-19b07917a477
 # ╟─29222cbd-71fe-4a26-a9cd-617fc749f058
 # ╟─16c4c54e-89de-4609-a707-907971c9c29a
