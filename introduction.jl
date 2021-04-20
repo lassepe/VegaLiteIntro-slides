@@ -91,7 +91,7 @@ Vega-Lite provides a very principled way of describing visualizations by followi
 - **Channels** correspond to graphical properties.
   - e.g. `x`, `y`, `color`, `opacity`
 
-- **Marks** derive their visual properties from these channels.
+- **Marks** are visualization primitives taht derive their visual properties from channels.
   - e.g. `point`, `line`, `area`
 """
 
@@ -118,21 +118,21 @@ scatter_plot_spec = let
 	@vlplot(
 		mark = {"point", filled = true, opacity = 0.5},
 		encoding = {
-		  x = "time",
-		  y = "amplitude",
-		  color = "class"
+		  x = "time:q",
+		  y = "amplitude:q",
+		  color = "class:n"
 		},
 	)
 end;
 
 # ╔═╡ 9df59c02-8aba-4d15-8064-33763cfdb524
-md"**Generated VLSpec**"
+md"**Generated VLSpec** can be saved to disk along with data to make the figure reproducable:"
 
 # ╔═╡ 23cdd13b-4834-4fbe-9a18-b7ccec9717be
 Text(json_string(scatter_plot_spec))
 
 # ╔═╡ 174bddf0-a4f1-4f90-a4fe-fe1ee801c842
-md"# Rending a VLSpec"
+md"# Rendering a VLSpec"
 
 # ╔═╡ 1a9ce711-a086-444f-b88b-86fcc3509e7f
 md"Noise σ: $(@bind σ PlutoUI.Slider(0.0:0.01:1.0; default=0.2, show_value = true))"
@@ -148,7 +148,7 @@ canvas + scatter_plot_spec(data)
 
 # ╔═╡ 1562b780-2618-4eff-a582-cf6c1ffbae9b
 md"""
-# Tranformations and Layers
+# Adding Transformations
 """
 
 # ╔═╡ 313934df-66a9-42e9-a6d4-73f13a6c90f6
@@ -179,29 +179,56 @@ end;
 data |> (canvas + scatter_plot_spec + statistics_plot_spec)
 
 # ╔═╡ 5c09ced6-09b7-494d-a561-7484418fd08d
-md"# Teaser: Tooltips and Signals"
+md"# Interaction: Tooltips and Parameters"
 
 # ╔═╡ ecf745b5-f33e-4512-9d9b-9ec9bdf71687
 md"""
-- **Tooltips** are just another *channel*.
+**Tooltip** is also just a mark property that can be bound to a *channel*.
 """
 
-# ╔═╡ b2f793b3-971d-4bd6-8a4e-521d1c433307
+# ╔═╡ 68946680-b280-40ee-96ed-4da9ed5dc529
+tooltip_example_spec = let
+	@vlplot(
+		width = slide_width,
+		mark = "point",
+		encoding = {x = "time:q", y = "amplitude:q", tooltip = "class" }
+	)
+end;
+
+# ╔═╡ 6a000db6-57dd-4f26-b162-30d996f437ae
+data |> tooltip_example_spec |> FileIO.save("examples/tooltip_example.html")
+
+# ╔═╡ 5caa8bc7-c3ea-43f5-abd5-6f1ce9b2b43a
+tooltip_example_spec |> json_string |> Text;
+
+# ╔═╡ d3934459-981f-42af-91c1-8000f221e43f
 md"""
-##### TODO
-- show julia code
-- show json
-- link two examples that open in another window
+**Parameters** can be bound to input elements to interact with data.
 """
+
+# ╔═╡ 581a5ad1-90ef-47d7-93e9-946bde1a0a86
+parameter_example_spec = let
+	@vlplot(
+		width = slide_width,
+		params = [{ name = "threshold", value = 7, bind = { input = "range", min = 0.1, max = 7, step = 0.1}}],
+		transform = [{ filter = "datum.time < threshold"}],
+	)
+end;
+
+# ╔═╡ a5e112e7-581c-4a87-8f7b-183baa4a4558
+data |> (parameter_example_spec + scatter_plot_spec) |> FileIO.save("examples/parameter_example.html")
+
+# ╔═╡ a6869f88-0d5a-41d2-9819-a189e37e282a
+parameter_example_spec |> json_string |> Text;
 
 # ╔═╡ 29222cbd-71fe-4a26-a9cd-617fc749f058
 md"""
 # Conclusion
 """
 
-# ╔═╡ 458377ed-36db-4244-883c-19b07917a477
+# ╔═╡ fd8f4530-8377-4cd0-8ba9-3d4c7619e04e
 md"""
-**A Potential Paper Workflow**
+**A Potential Research Workflow**
 
 - **Code repos**: Create figures programatically with front-end of choice
 - **Paper repo**: Include visualization pipeline as `.csv` + `.vl.json`
@@ -264,9 +291,15 @@ HTML("""
 # ╟─313934df-66a9-42e9-a6d4-73f13a6c90f6
 # ╟─5c09ced6-09b7-494d-a561-7484418fd08d
 # ╟─ecf745b5-f33e-4512-9d9b-9ec9bdf71687
-# ╟─b2f793b3-971d-4bd6-8a4e-521d1c433307
+# ╠═68946680-b280-40ee-96ed-4da9ed5dc529
+# ╠═6a000db6-57dd-4f26-b162-30d996f437ae
+# ╟─5caa8bc7-c3ea-43f5-abd5-6f1ce9b2b43a
+# ╟─d3934459-981f-42af-91c1-8000f221e43f
+# ╠═581a5ad1-90ef-47d7-93e9-946bde1a0a86
+# ╠═a5e112e7-581c-4a87-8f7b-183baa4a4558
+# ╟─a6869f88-0d5a-41d2-9819-a189e37e282a
 # ╟─29222cbd-71fe-4a26-a9cd-617fc749f058
-# ╟─458377ed-36db-4244-883c-19b07917a477
+# ╟─fd8f4530-8377-4cd0-8ba9-3d4c7619e04e
 # ╟─1347b662-fde1-4b95-acd3-9d6d9ad38c45
 # ╟─ac88ac5e-f300-456d-9ff8-972d42be14e5
 # ╟─16c4c54e-89de-4609-a707-907971c9c29a

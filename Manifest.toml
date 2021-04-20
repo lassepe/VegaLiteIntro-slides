@@ -533,9 +533,11 @@ version = "2.1.1"
 
 [[VegaLite]]
 deps = ["Base64", "DataStructures", "DataValues", "Dates", "FileIO", "FilePaths", "IteratorInterfaceExtensions", "JSON", "MacroTools", "NodeJS", "Pkg", "REPL", "Random", "Setfield", "TableTraits", "TableTraitsUtils", "URIParser", "Vega"]
-git-tree-sha1 = "eb937ff65666c83f6c4db40d07d2fecfedeaff7e"
+git-tree-sha1 = "381c348e2cc4ff48b0addba61ec7020a95d4c1c3"
+repo-rev = "9b5fb3e"
+repo-url = "https://github.com/queryverse/VegaLite.jl.git"
 uuid = "112f6efa-9a02-5b7d-90c0-432ed331239a"
-version = "2.4.1"
+version = "2.3.2-DEV"
 
 [[WeakRefStrings]]
 deps = ["DataAPI", "Random", "Test"]
