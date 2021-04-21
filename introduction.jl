@@ -256,6 +256,12 @@ md"""
 # ╔═╡ 16c4c54e-89de-4609-a707-907971c9c29a
 md"# The End"
 
+# ╔═╡ d5130ea7-34f7-4cea-b204-47c7340c2f42
+md"![](https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://github.com/lassepe/VegaLiteIntro-slides)"
+
+# ╔═╡ 9ada4c09-df8d-47b4-b310-ee09e97b59f1
+md"<https://github.com/lassepe/VegaLiteIntro-slides>"
+
 # ╔═╡ ea1e5ca9-7b8a-4f71-9e4c-89df3f6420ec
 md"# VegaEditor"
 
@@ -303,5 +309,7 @@ HTML("""
 # ╟─1347b662-fde1-4b95-acd3-9d6d9ad38c45
 # ╟─ac88ac5e-f300-456d-9ff8-972d42be14e5
 # ╟─16c4c54e-89de-4609-a707-907971c9c29a
+# ╟─d5130ea7-34f7-4cea-b204-47c7340c2f42
+# ╟─9ada4c09-df8d-47b4-b310-ee09e97b59f1
 # ╟─ea1e5ca9-7b8a-4f71-9e4c-89df3f6420ec
 # ╟─36773141-218b-4351-bf65-c2b7cd877c39
