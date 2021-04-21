@@ -12,3 +12,4 @@ Pluto.run()
 ```
 
 Now you can use the file browser to open `./introduction.jl` in Pluto.
+You can learn more about Pluto.jl [here](https://github.com/fonsp/Pluto.jl).
