@@ -91,7 +91,7 @@ Vega-Lite provides a very principled way of describing visualizations by followi
 - **Channels** correspond to graphical properties.
   - e.g. `x`, `y`, `color`, `opacity`
 
-- **Marks** are visualization primitives taht derive their visual properties from channels.
+- **Marks** are visualization primitives that derive their visual properties from channels.
   - e.g. `point`, `line`, `area`
 """
 
@@ -171,8 +171,8 @@ statistics_plot_spec = let
 			}
 		],	
 	) +
-	@vlplot(mark = "line", y = "rolling_average:q") +
-	@vlplot(mark = "errorband", y = "rolling_lower:q", y2 = "rolling_upper:q")
+	@vlplot(mark = "line", encoding = {y = "rolling_average:q"}) +
+	@vlplot(mark = "errorband", encoding = {y = "rolling_lower:q", y2 = "rolling_upper:q"})
 end;
 
 # ╔═╡ a6cbd17a-3656-4ce8-8728-e68b97c91695
@@ -231,7 +231,7 @@ md"""
 **A Potential Research Workflow**
 
 - **Code repos**: Create figures programatically with front-end of choice
-- **Paper repo**: Include visualization pipeline as `.csv` + `.vl.json`
+- **Paper repo**: Include visualization pipeline as `.csv` + `.vegalite`
 - **Other works**: Can load `.csv` and modify `.vegalite` to streamline figures per manuscript
 """
 
