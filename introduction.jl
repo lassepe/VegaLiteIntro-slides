@@ -22,10 +22,10 @@ begin
 	import FileIO
 	import CSVFiles
 	import JSON
-	import HypertextLiteral: @htl
 	import Random
 	
 	using DataFrames: DataFrame
+	using HypertextLiteral: @htl
 	using VegaLite: Vega, VegaLite, @vlplot
 end;
 
@@ -102,7 +102,7 @@ md"""
 
 # ╔═╡ 51a6c6eb-bb4b-4301-ba37-df802f7878d0
 md"""
-**Tidy Data**: Table-like data that can be iterated column-wise
+**Tidy Data**: Table-like data that can be iterated row-wise
 - Programmatically: `DataFrame`, iterable of `NamedTuple` or `Dict`.
 - Standalone: YAML, CSV, JSON
 """
@@ -230,7 +230,7 @@ md"""
 md"""
 **A Potential Research Workflow**
 
-- **Code repos**: Create figures programatically with front-end of choice
+- **Code repos**: Create figures programatically with a front-end of their choice
 - **Paper repo**: Include visualization pipeline as `.csv` + `.vegalite`
 - **Other works**: Can load `.csv` and modify `.vegalite` to streamline figures per manuscript
 """
@@ -239,7 +239,8 @@ md"""
 md"""
 **Limitations**
 
-- Only 2D visualizations ([for now](https://github.com/vega/vega/issues/1738))
+- No support for image data
+- Only 2D visualizations  ([for now](https://github.com/vega/vega/issues/1738))
 - No LaTex support ([yet](https://github.com/vega/vega/issues/898))
 """
 
