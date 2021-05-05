@@ -191,7 +191,7 @@ tooltip_example_spec = let
 	@vlplot(
 		width = slide_width,
 		mark = "point",
-		encoding = {x = "time:q", y = "amplitude:q", tooltip = "class" }
+		encoding = { x = "time:q", y = "amplitude:q", tooltip = "class" }
 	)
 end;
 
